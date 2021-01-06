@@ -1,0 +1,21 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<div class='container'>
+    <div class="card card-body m-3">
+        <h3 class="card-title">Login</h3>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger">{{message}}</div>
+            {% endfor %}
+        {% endif %}
+        <form method="post" class="form-group m-3" action="{% url 'accounts:login_page' %}">
+            {% csrf_token %}
+            <p> {{login_form.username}} </p>
+            <p> {{login_form.password}} </p>
+            <input class="btn btn-info" type="submit" value="Submit">
+            <input type="hidden" name="next" value="{{next}}">
+            <p class="card-text mt-2"><a href="{% url 'password_reset' %}">Forgot your password?</a></p>
+        </form>
+    </div>
+</div>
+{% endblock  %}

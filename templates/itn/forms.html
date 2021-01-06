@@ -1,0 +1,109 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+
+<script>
+    $('#message').hide()
+
+    $('#day-form').on('submit', function(e){
+        e.preventDefault();
+        console.log('day form submitted');
+        group_selected = "{{group_selected}}"
+        for (var instance in CKEDITOR.instances)
+            CKEDITOR.instances[instance].updateElement();
+        var serializedData = $(this).serialize() + '&formType=' + 'day' + '&group=' + group_selected;
+        //console.log(serializedData);
+        post_form(serializedData);
+    })
+
+    $('#night-form').on('submit', function(e){
+        e.preventDefault();
+        console.log('night form submitted');
+        group_selected = "{{group_selected}}"
+        for (var instance in CKEDITOR.instances)
+            CKEDITOR.instances[instance].updateElement();
+        var serializedData = $(this).serialize() + '&formType=' + 'night' + '&group=' + group_selected;
+        post_form(serializedData);
+    })
+
+    function post_form(serializedData) {
+        $.ajax({
+            type: 'POST',
+            url: "post_form/",
+            data: serializedData,
+            success: function (response) {
+                $('#message').text("Your post has been saved").show();
+                console.log('ajax success.')
+            },
+            error: function (response) {
+                console.log("ajax got an error.")
+                alert(response['responseJSON']['error']);
+            }
+        })
+    }
+</script>
+<script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+<script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+<h1 class="text-center m-3">{{group_title}}</h1>
+<div class="alert alert-success m-3" id="message" role="alert"></div>
+<div class="row m-3">
+    <div class="card col-sm p-3">
+        <h5>Day Note</h5>
+        {% if isToday %}
+        {% if dayEvent %}
+        <div class="text-right">Last edit by <b>{{ dayEvent.editor}}</b> in <b>{{dayEvent.signed_by.username}}</b></div>
+        <hr>
+        {% endif %}
+        <div class="form-group w-50">    
+            <form action="" id="day-form" method="post">
+            {% csrf_token %}
+            {{ dayForm.day_content }}
+            <div class="block mt-3">
+                <label for="editor">Name: &nbsp</label>
+                {{ dayForm.editor}}
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary mt-3">Save</button>
+            </form>
+        </div>
+        {% else %}
+        {% if dayEvent %}
+        <div class="text-right">Last edit by <b>{{ dayEvent.editor}}</b> in <b>{{dayEvent.signed_by.username}}</b></div>
+        <hr>
+        {{ dayEvent.day_content | safe}}
+        {% else %}
+        <p class="text-muted">Nothing to display.</p>
+        {% endif %}
+        {% endif %}
+    </div>
+
+    <div class="card col-sm p-3">
+        <h5>Night Note</h5>
+        {% if isToday %}    
+        {% if nightEvent %}
+        <div class="text-right">Last edit by <b>{{ nightEvent.editor}}</b> in <b>{{nightEvent.signed_by.username}}</b></div>
+        <hr>
+        {% endif %}
+        <div class="form-group w-50">
+            <form action="" id="night-form" method="post">
+            {% csrf_token %}
+            {{nightForm.night_content }}
+            <div class="block mt-3">
+                <label for="editor">Name: &nbsp</label>
+                {{nightForm.editor}}
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary mt-3">Save</button>
+            </form>
+        </div>
+        {% else %}
+        {% if nightEvent %}
+        <div class="text-right">Last edit by <b>{{ nightEvent.editor}}</b> in <b>{{nightEvent.signed_by.username}}</b></div>
+        <hr>
+        {{ nightEvent.night_content | safe}}
+        {% else %}
+        <p class="text-muted">Nothing to display.</p>
+        {% endif %}
+        {% endif %}
+    </div>
+</div>

@@ -1,0 +1,109 @@
+{% load static %}
+{% load custom_tags %}
+<script>
+    $('#group_id li a').click(function(e){
+        e.preventDefault();
+        var group_selected =  $(this).attr('href')
+        //console.log(group_selected)
+        var date = "{{date}}"
+        get_forms(group_selected, date);
+    })
+    function get_forms(group_selected, date) {
+        get_files(group_selected, date);
+        $.ajax({
+            type: 'GET',
+            url: "forms/",
+            data: {"group": group_selected, 'date': date},
+            success: function(res) {
+                $('#forms').html(res)
+                $('#summary').empty()
+            },
+            error: function(res) {
+                console.log('ajax forms GET error')
+            }
+        })
+    }
+
+    function get_files(group_selected, date) {
+        $.ajax({
+            type: 'GET',
+            url: "uploads/",
+            data: {"group": group_selected, 'date': date},
+            success: function(res) {
+                $('#files').html(res)
+            },
+            error: function(res) {
+                console.log('ajax files GET error')
+            }
+        })
+    }
+
+</script>
+<div>
+    <h3 class="text-center m-3">{{date_nz|date:"D, j F Y"}}</h3>
+    <ul class="nav nav-tabs" id="group_id">
+        <li class="nav-item">
+            <a class="nav-link" href="supervisor_processing">Supervisor Processing</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="supervisor_material_handle">Supervisor Material Handling</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="staging">Staging</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="dispensary">Dispensary</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="wetmix6">Wetmix 6</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="wetmix7">Wetmix 7</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="evaporator">Evaporator</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="dryer">Dryer</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="packing">Packing</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="hygienists">Hygienists</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="engineering_electrical">Engineering/Electrical</a>
+        </li>
+    </ul>
+    <div id="forms"></div>
+    <div id="summary">
+    <div class="row m-3">
+        <div class="card col-sm p-3">
+            <h5>Day Note</h5>
+            {% if day_nums %}
+            <ul>
+            {% for day_num in day_nums %}
+            <li><b>{% unslugfy day_num.group %}:</b> {{day_num.nums_group}}</li>
+            {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted">No event to display.</p>
+            {% endif %}
+        </div>
+        <div class="card col-sm p-3">
+            <h5>Night Note</h5>
+            {% if night_nums %}
+            <ul>
+            {% for night_num in night_nums %}
+            <li><b>{% unslugfy night_num.group %}:</b> {{night_num.nums_group}}</li>
+            {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted">No event to display.</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row m-3 text-secondary">*<b>Note:</b> &nbsp Every 6 hours pages will be reloaded. Please ensure saving your work.</div>
+    </div>
+</div>

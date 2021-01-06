@@ -1,0 +1,55 @@
+{% load static %}
+<script>
+    //$('#upload-msg').hide()
+
+    $('#upload-form').on('submit', function(e){
+        e.preventDefault();
+        console.log('Image form submitted');
+        group_selected = "{{group_selected}}"
+        var data = new FormData($(this).get(0));
+        data.append('group', group_selected)
+        post_image(group_selected, data);
+    })
+
+    function post_image(group_selected, data) {
+        $.ajax({
+            type: 'POST',
+            url:  'uploads/',
+            data: data,
+            processData: false,
+            contentType: false,
+            success: function(res) {
+                $('#files').html(res)
+                $('#upload-msg').append('<div class="alert alert-success">Your file has been uploaded.</div>');
+                console.log('ajax success.')
+            },
+            error: function (res) {
+                console.log("ajax got an error.")
+                alert(res['responseJSON']['error']);
+            }
+        })
+    }
+
+</script>
+<div class="m-3" id="upload-msg"></div>
+{% if isToday %}
+<div class="form-group m-3 p-3">
+    <form method="post" id="upload-form" enctype="multipart/form-data">
+        <div class="row">
+        {% csrf_token %}
+        {{ form.file }}
+        <button type="submit" class="btn btn-primary btn-lg btn-block mt-3">Upload</button>
+        </div>
+    </form>
+</div>
+{% endif %}
+<div class="list-group m-3">
+<h5 class=""> Download List</h5>
+{% if files %}
+{% for file in files %}
+    <a href="{{ file.file.url }}" download class="list-group-item list-group-item-action text-center"> {{file.file.name}} </a>
+{% endfor %}
+{% else %}
+    <p class="text-muted">No download item to display.</p>
+{% endif %}
+</div>

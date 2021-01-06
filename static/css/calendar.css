@@ -1,0 +1,55 @@
+.container-calendar {
+    background: #ffffff;
+    padding: 15px;
+    max-width: 475px;
+    margin: 0 auto;
+    overflow: auto;
+}
+
+.table-calendar {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table-calendar td, .table-calendar th {
+    padding: 5px;
+    border: 1px solid #e2e2e2;
+    text-align: center;
+    vertical-align: top;
+}
+
+.selected {
+    font-weight: bold;
+    outline: 1px dashed #000000;
+    border-bottom: 2px solid currentColor;
+}
+
+/* sunday */
+.week td:nth-child(7) {
+    color: red;
+}
+
+/* saturday */
+.week td:nth-child(6) {
+    color: green;
+}
+
+.monthAndYear {
+    text-align: center;
+    margin-top: 0;
+}
+
+.button-container-calendar {
+    position: relative;
+    margin-bottom: 1em;
+    overflow: hidden;
+    clear: both;
+}
+
+.previous {
+    float: left;
+}
+
+.next {
+    float: right;
+}

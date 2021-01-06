@@ -1,0 +1,45 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block content %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{% static 'js/calendar.js' %}"></script>
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/calendar.css' %}">
+
+<div class="col-sm-3">
+    <div class="container-calendar">
+        <h3 class="monthAndYear">{{title}}</h3>
+        <div class="button-container-calendar">
+            <a class="previous btn btn-primary" href="{% url 'itn:main' %}?month={{ prev_month }}">&#8249;</a>
+            <a class="next btn btn-primary" href="{% url 'itn:main' %}?month={{ next_month }}">&#8250;</a>
+        </div>
+        <table border="0" cellpadding="0" cellspacing="0" class="table-calendar">
+        <tr>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+            <th>Sun</th>
+        </tr>
+        {% for days in week %}
+        <tr class="week">
+            {% for day in days %}
+            {% if day == today.day and monthSet == today.month and yearSet == today.year %}
+            <td class="datepicker selected" value={{yearSet}}-{{monthSet}}-{{day|default:0}}>{{day|default:""}}</td>
+            {% else %}
+            <td class="datepicker" value={{yearSet}}-{{monthSet}}-{{day|default:0}}>{{day|default:""}}</td>
+            {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+        </table>
+    </div>
+    <div id="files"></div>
+</div>
+<div class="col-sm-9">
+    <div id="groups"></div>
+</div>
+{% endblock content %}

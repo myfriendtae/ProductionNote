@@ -1,0 +1,36 @@
+{% load static %}
+
+<style>
+    #hello-msg{
+        font-size: 18px;
+        color: #fff;
+        margin-right: 20px;
+        text-decoration: none;
+    }
+</style>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navaigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'main' %}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'itn:main' %}">ITN</a>
+            </li>
+        </ul>
+    </div>
+    <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+        <ul class="navbar-nav ml-auto">
+            {% if user.is_authenticated %}
+            <li class="nav-item"><a class="nav-link disabled">{{user.username}}</a></li>
+            <li class="nav-item"><a href="{% url 'accounts:logout_page' %}" class="nav-link justify-content-end">Logout</a></li>
+            {% else %}
+            <li class="nav-item"><a href="{% url 'accounts:login_page' %}" class="nav-link">Login</a></li>
+            {% endif %}
+        </ul>
+    </div>    
+</nav>
