@@ -6,8 +6,8 @@ These are the main functionalities of the application.
 - Login system and the form validation.
 - Clickable calendar using Ajax, showing partial information without reloading the whole page.
 - New Zealand timezone applied for creating each note and accruately displaying data based on the date of users' shift schduele.
-- Enable to users to use Rich Text Editor (CKEditor), only current date.
-- Enable to users to upload files and to download their local machine.
+- Enable to users to use Rich Text Editor (CKEditor), only for current date (access controls).
+- Enable to users to upload files and to download them in their local machine.
 
 # Snippets
 - Login system linked in the navigation bar.
